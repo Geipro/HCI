@@ -1,0 +1,680 @@
+<html>
+
+<head>
+    <title>HomeWork</title>
+
+    <style type="text/css">
+        body {
+            margin: 0px 0px 0px 0px;
+        }
+
+        h1 {
+            font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+            font-size: 30px;
+            padding: 20px 10px;
+            text-align: center;
+            text-transform: uppercase;
+            text-rendering: optimizeLegibility;
+            color: #e0dfdc;
+            background-color: #333;
+            letter-spacing: .1em;
+            text-shadow: 0 -1px 0 #fff,
+            0 1px 0 #2e2e2e,
+            0 2px 0 #2c2c2c,
+            0 3px 0 #2a2a2a,
+            0 4px 0 #282828,
+            0 5px 0 #262626,
+            0 6px 0 #242424,
+            0 7px 0 #222,
+            0 8px 0 #202020,
+            0 9px 0 #1e1e1e,
+            0 10px 0 #1c1c1c,
+            0 11px 0 #1a1a1a,
+            0 12px 0 #181818,
+            0 13px 0 #161616,
+            0 14px 0 #141414,
+            0 15px 0 #121212,
+            0 22px 30px rgba(0, 0, 0, 0.9);
+        }
+
+        input{
+            height:30px;
+        }
+
+        input[type="number"] {
+            width:80px;
+        }
+
+        input[type="button"] {
+            width:80px;
+        }
+
+        #calculator {
+            font-size: 0;
+            width: 400px;
+            height: 680px;
+            background-color: #474444;
+            padding: 20px;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        #result {
+            width: 385px;
+            height: 180px;
+            margin-bottom: 15px;
+            padding: 0px 5px 0px 5px;
+            background-color: #dde7dd;
+            border-radius: 5px;
+            display: inline-flex;
+            justify-content: flex-end;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: inset 0 0px 3px;
+            font: 20px digital;
+        }
+
+        #plot{
+            width:396px;
+            height:422px;
+            align-items : center;
+            position : absolute;
+            display:none;
+        }
+
+        #function-value{
+            width: 396px;
+            height: 106px;
+            display: none;
+            position:absolute;
+            background-color: whitesmoke;
+            margin-top : -195px;
+            box-shadow: inset 0 0px 3px;
+            font: 20px digital;
+            padding-left: 10px;
+        }
+
+        #min-max{
+            width: 396px;
+            height: 80px;
+            display: none;
+            position:absolute;
+            background-color: whitesmoke;
+            margin-top : -90px;
+            box-shadow: inset 0 0px 3px;
+            font: 20px digital;
+            padding-left: 10px;
+        }
+
+        .selector{
+            width: 396px;
+            height: 118px;
+            position: absolute;
+            display:none;
+        }
+
+        .key {
+            width: 75px;
+            height: 40px;
+            background-color: #eeeeee;
+            display: inline-flex;
+            margin: 3px 5px 8px 0px;
+            vertical-align: middle;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 0px 5px 0px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #a1a1a1, 0 2px 5px rgba(0, 0, 0, .75);
+            font: bold 20px sans-serif;
+            position: static;
+            z-index: 1;
+        }
+
+        .back-key {
+            width: 120px;
+            height: 40px;
+            background-color: orange;
+            color: white;
+            padding-right: 12px;
+            font-size: 25px;
+        }
+
+        .set-key {
+            width: 95px;
+            height: 40px;
+            background-color: yellow;
+            font: bold 18px "Times New Roman"
+        }
+
+        .inner-key {
+            width: 419px;
+            height: 180px;
+            display: none;
+            padding-left: 0px;
+            border-radius: 5px;
+            position: absolute;
+            overflow-y: auto;
+            margin-top: -195px;
+            z-index: 2;
+        }
+
+        .function-key {
+            width: 131px;
+            height: 180px;
+            padding:0px;
+            margin:0px;
+            font: italic bold 20px "Times New Roman";
+            color: black;
+            background-color: #dde7dd;
+        }
+
+        .eval-key {
+            height: 40px;
+            background-color: #4a9840;
+            color: white;
+        }
+
+        .clear-key {
+            width: 120px;
+            height: 40px;
+            background-color: #bb1c09;
+            color: white;
+            font-size: 25px
+        }
+
+        .key:active {
+            height: 40px;
+            background-color: #a1a1a1;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+        
+        .two{
+            width: 198px
+        }
+        .four{
+            width:198px;
+            height:90px;
+        }
+        .six{
+            height:90px;
+        }
+        .selector img{
+            position: absolute; top:0; left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+    </style>
+
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js' type='text/javascript'></script>
+    <script src="./src/plotly.js"></script>
+    <script src='./src/math.js' type='text/javascript'></script>
+    <script type="text/javascript">
+        var f='0';
+        var g='0';
+        var h='0';
+        var min='-50';
+        var max='50';
+        $(document).ready(function () {
+            var parser = math.parser();
+            var displayValue = '0';
+            var fullstring;
+            var Previous;
+            var Pre_img;
+            var IsShowed = false;
+            $('#result').text(displayValue);
+            $('.key').each(function (index, key) {
+                $(this).click(function (e) {
+                    if (displayValue == '0') displayValue = '';
+                    if ($(this).text() == 'EV') {
+                        try {
+                            fullstring = displayValue;
+                            displayValue = parser.eval(displayValue).toString();
+                            var tokens = displayValue.split(' ');
+                            if (tokens[0] == 'function') {
+                                displayValue = tokens[0];
+                                if(fullstring.slice(0, 4) == 'f(x)'){
+                                    f = fullstring.slice(5);
+                                }
+                                else if(fullstring.slice(0, 4) == 'g(x)'){
+                                    g = fullstring.slice(5);
+                                }
+                                else if(fullstring.slice(0, 4) == 'h(x)'){
+                                    h = fullstring.slice(5);
+                                }
+                            }
+                            $('#result').text(displayValue);
+                            displayValue = '0';
+                        }
+                        catch (e) {
+                            displayValue = '0';
+                            if (displayValue != 'function') {
+                                $('#result').text(e);
+                            }
+                        }
+                        $(Previous).hide();
+                        $(Pre_img).hide();
+                        $('.selector').hide();
+                    } else if ($(this).hasClass('set-key')) {
+                        var obj = $("#result").offset();
+                        if ($(this).text() == 'f(x)') {
+                            if (IsShowed) {
+                                $(Previous).hide();
+                                $('#fx').toggle();
+                                Previous = '#fx';
+                                IsShowed = true;
+                            }
+                            else {
+                                $('#fx').show();
+                                Previous = '#fx';
+                                IsShowed = true;
+                            }
+                        }
+                        else if ($(this).text() == '변수') {
+                            if (IsShowed) {
+                                $(Previous).hide();
+                                $('#xyz').show();
+                                Previous = '#xyz';
+                                IsShowed = true;
+                            }
+                            else {
+                                $('#xyz').show();
+                                Previous = '#xyz';
+                                IsShowed = true;
+                            }
+                        }
+                        else if ($(this).text() == '논리연산') {
+                            if (IsShowed) {
+                                $(Previous).hide();
+                                $('#logic').show();
+                                Previous = '#logic';
+                                IsShowed = true;
+                            }
+                            else {
+                                $('#logic').show();
+                                Previous = '#logic';
+                                IsShowed = true;
+                            }
+                        }
+                        else if ($(this).text() == '무리수') {
+                            if (IsShowed) {
+                                $(Previous).hide();
+                                $('#irra_num').show();
+                                Previous = '#irra_num';
+                                IsShowed = true;
+                            }
+                            else {
+                                $('#irra_num').show();
+                                Previous = '#irra_num';
+                                IsShowed = true;
+                            }
+                        }
+                        else if ($(this).text() == '삼각함수') {
+                            if (IsShowed) {
+                                $(Previous).hide();
+                                $('#tri_func').show();
+                                Previous = '#tri_func';
+                                IsShowed = true;
+                                $('.selector').show();
+                                $(Pre_img).hide();
+                                $('#idtri').show();
+                                Pre_img = '#idtri';
+                            }
+                            else {
+                                $('#tri_func').show();
+                                Previous = '#tri_func';
+                                IsShowed = true;
+                                $('.selector').show();
+                                $(Pre_img).hide();
+                                $('#idtri').show();
+                                Pre_img = '#idtri';
+                            }
+                        }
+                        else if ($(this).text() == '지수로그') {
+                            if (IsShowed) {
+                                $(Previous).hide();
+                                $('#exp_log').show();
+                                Previous = '#exp_log';
+                                IsShowed = true;
+                            }
+                            else {
+                                $('#exp_log').show();
+                                Previous = '#exp_log';
+                                IsShowed = true;
+                            }
+                        }
+                        else if ($(this).text() == '벡터행렬') {
+                            if (IsShowed) {
+                                $(Previous).hide();
+                                $('#vec').show();
+                                Previous = '#vec';
+                                IsShowed = true;
+                            }
+                            else {
+                                $('#vec').show();
+                                Previous = '#vec';
+                                IsShowed = true;
+                            }
+                        }
+                        else if ($(this).text() == '제곱루트') {
+                            if (IsShowed) {
+                                $(Previous).hide();
+                                $('#root').show();
+                                Previous = '#root';
+                                IsShowed = true;
+                            }
+                            else {
+                                $('#root').show();
+                                Previous = '#root';
+                                IsShowed = true;
+                            }
+                        }
+                    }
+
+                    else {
+                        if ($(this).text() == 'AC') {
+                            displayValue = '0';
+                            $('#result').text(displayValue);
+                            $(Previous).hide();
+                            $(Pre_img).hide();
+                            $('.selector').hide();
+                            $('#plot').hide();
+                            $('#function-value').hide();
+                            $('#min-max').hide();
+                        }
+                        else if($(this).text() == '벡터'){
+                            $('.selector').show();
+                            $('.selector').show();
+                            $('#idvec').show();
+                            Pre_img = '#idvec'
+                        }
+                        else if($(this).text() == '행렬곱'){
+                            displayValue += '*';
+                            $('#result').text('*');
+                            $('.selector').show();
+                            $('#idmatrix').show();
+                            Pre_img = '#idmatrix'
+                        }
+                        else if ($(this).text() == 'Close') {
+                            $(Previous).hide();
+                            $(Pre_img).hide();
+                            $('.selector').hide();
+                            $('#plot').hide();
+                            $('#function-value').hide();
+                            $('#min-max').hide();
+                        }
+                        else if ($(this).text() == 'Back') {
+                            displayValue = displayValue.slice(0, -1);
+                            $('#result').text(displayValue);
+                        }
+                        else if($(this).text() == 'Inverse'){
+                            displayValue += 'inv';
+                            $('#result').text('inv');
+                            $('.selector').show();
+                            $('#idinv').show();
+                            Pre_img = '#idinv';
+                        }
+                        else if($(this).text() == '그래프'){
+                            $('#function-value').show();
+                            $('#function-value').html("f(x) = " + f + "<br> g(x) = " + g + "<br> h(x) = " + h);
+                            $('#plot').show();
+                            draw();                            
+                            $('#min-max').show();
+                        }
+                        else if($(this).text() == 'log'){
+                            displayValue += $(this).text();
+                            $('#result').text(displayValue);
+                            $('.selector').show();
+                            $('#idlog').show();
+                            Pre_img = '#idlog';
+                        }
+                        else if($(this).text() == 'exp'){
+                            displayValue += $(this).text();
+                            $('#result').text(displayValue);
+                            $('.selector').show();
+                            $('#idexp').show();
+                            Pre_img = '#idexp';
+                        }
+                        else if($(this).text() == 'cross'){
+                            displayValue += $(this).text();
+                            $('#result').text(displayValue);
+                            $('.selector').show();
+                            $('#idcross').show();
+                            Pre_img = '#idcross';
+                        }
+                        else if($(this).text() == 'dot'){
+                            displayValue += $(this).text();
+                            $('#result').text(displayValue);
+                            $('.selector').show();
+                            $('#iddot').show();
+                            Pre_img = '#iddot';
+                        }
+                        else if($(this).text() == 'det'){
+                            displayValue += $(this).text();
+                            $('#result').text(displayValue);
+                            $('.selector').show();
+                            $('#iddet').show();
+                            Pre_img = '#iddet';
+                        }
+                        else if($(this).text() == '^'){
+                            displayValue += $(this).text();
+                            $('#result').text(displayValue);
+                            $('.selector').show();
+                            $('#idsq').show();
+                            Pre_img = '#idsq';
+                        }
+                        else if($(this).text() == 'sqrt'){
+                            displayValue += $(this).text();
+                            $('#result').text(displayValue);
+                            $('.selector').show();
+                            $('#idsqrt').show();
+                            Pre_img = '#idsqrt';
+                        }
+                        else {
+                            displayValue += $(this).text();
+                            $('#result').text(displayValue);
+                        }
+                        $(Previous).hide();
+                    }
+                    e.preventDefault()
+                })
+            })
+            $('#btn').click(function(){
+                draw();
+            })
+        })
+
+
+    function draw() {
+        try {
+            // compile the expression once
+            min = $('#min').val();
+            max = $('#max').val();
+            var expr1 = math.compile(f);
+            var expr2 = math.compile(g);
+            var expr3 = math.compile(h);
+
+            // evaluate the expression repeatedly for different values of x
+            var t1_xValues = math.range(min, max, 1).toArray();
+            var t1_yValues = t1_xValues.map(function (x) {
+                return expr1.eval({x: x});
+            });
+            var t2_xValues = math.range(min, max, 1).toArray();
+            var t2_yValues = t2_xValues.map(function (x) {
+                return expr2.eval({x: x});
+            });
+            var t3_xValues = math.range(min, max, 1).toArray();
+            var t3_yValues = t3_xValues.map(function (x) {
+                return expr3.eval({x: x});
+            });
+
+        // render the plot using plotly
+            var trace1 = {
+                x: t1_xValues,
+                y: t1_yValues,
+                type: 'scatter',
+                name: 'f(x)'
+            };
+            var trace2 = {
+                x: t2_xValues,
+                y: t2_yValues,
+                type: 'scatter',
+                name: 'g(x)'
+            }
+            var trace3 = {
+                x: t3_xValues,
+                y: t3_yValues,
+                type: 'scatter',
+                name: 'h(x)'
+            }
+            var data = [trace1, trace2, trace3];
+            Plotly.newPlot('plot', data);
+        }
+        catch (err) {
+            console.error(err);
+            alert(err);
+        }
+    }
+    </script>
+
+</head>
+
+<body>
+    <h1 z-index:1>My_Calculator</h1>
+
+    <div id="calculator">
+        <div id="result">
+            
+        </div>
+        <div id="select_btn">
+            <div class="inner-key" id="fx">
+                <span class="key function-key four">f(x)</span>
+                <span class="key function-key four">g(x)</span>
+                <span class="key function-key four">h(x)</span>
+                <span class="key function-key four">그래프</span>
+            </div>
+            <div class="inner-key" id="xyz">
+                <span class="key function-key six">a</span>
+                <span class="key function-key six">b</span>
+                <span class="key function-key six">w</span>
+                <span class="key function-key six">x</span>
+                <span class="key function-key six">y</span>
+                <span class="key function-key six">z</span>
+            </div>
+            <div class="inner-key" id="logic">
+                <span class="key function-key six">==</span>
+                <span class="key function-key six">!=</span>
+                <span class="key function-key six">></span>
+                <span class="key function-key six"><</span>
+                <span class="key function-key six">>=</span>
+                <span class="key function-key six"><=</span>
+            </div>
+            <div class="inner-key" id="irra_num">
+                <span class="key function-key">pi</span>
+                <span class="key function-key">e</span>
+                <span class="key function-key">i</span>
+            </div>
+            <div class="inner-key" id="tri_func">
+                <span class="key function-key six">sin</span>
+                <span class="key function-key six">cos</span>
+                <span class="key function-key six">tan</span>
+                <span class="key function-key six">sec</span>
+                <span class="key function-key six">csc</span>
+                <span class="key function-key six">cot</span>
+                <span class="key function-key six">asin</span>
+                <span class="key function-key six">acos</span>
+                <span class="key function-key six">atan</span>
+                <span class="key function-key six">sinh</span>
+                <span class="key function-key six">cosh</span>
+                <span class="key function-key six">tanh</span>
+                <span class="key function-key six">sech</span>
+                <span class="key function-key six">csch</span>
+                <span class="key function-key six">coth</span>
+            </div>
+            <div class="inner-key" id="exp_log">
+                <span class="key function-key two">exp</span>
+                <span class="key function-key two">log</span>
+            </div>
+            <div class="inner-key" id="vec">
+                <span class="key function-key six">벡터</span>
+                <span class="key function-key six">cross</span>
+                <span class="key function-key six">dot</span>
+                <span class="key function-key six">행렬곱</span>
+                <span class="key function-key six">det</span>
+                <span class="key function-key six">Inverse</span>
+            </div>
+            <div class="inner-key" id="root">
+                <span class="key function-key two">^</span>
+                <span class="key function-key two">sqrt</span>
+            </div>
+        </div>
+        <div id = "function-value">
+
+        </div>
+        <div id = "min-max">
+            정의역 정하기<br>
+            최소 : <input id="min" type="number" pattern="[0-9]*" value="-50"/>
+            최대 : <input id="max" type="number" pattern="[0-9]*" value="50"/>
+            <input id="btn" type="button" value="확인">
+        </div>
+        <span class="key back-key">Close</span>
+        <span class="key clear-key" font-size='30px'>AC</span>
+        <span class="key back-key">Back</span>
+        <div class="selector">
+                <img id="idcross" src="./img/cross.jpg" alt="외적">
+                <img id="iddot" src="./img/dot.jpg" alt="내적">
+                <img id="iddet" src="./img/det.jpg" alt="행렬식">
+                <img id="idexp" src="./img/exp.jpg" alt="e의n승">
+                <img id="idinv" src="./img/inverse.jpg" alt="역행렬">
+                <img id="idlog" src="./img/log.jpg" alt="log">
+                <img id="idsqrt" src="./img/sqrt.jpg" alt="루트">
+                <img id="idsq" src="./img/square.jpg" alt="n의m승">
+                <img id="idmatrix" src="./img/matrix_multiple.jpg" alt="행렬곱">
+                <img id="idtri" src="./img/tri.jpg" alt="삼각함수">
+                <img id="idvec" src="./img/vector.jpg" alt="벡터">
+        </div>
+        <div id="plot">
+            
+        </div>
+        <span class="key set-key">f(x)</span>
+        <span class="key set-key">변수</span>
+        <span class="key set-key">논리연산</span>
+        <span class="key set-key">무리수</span>
+        <span class="key set-key">삼각함수</span>
+        <span class="key set-key">지수로그</span>
+        <span class="key set-key">벡터행렬</span>
+        <span class="key set-key">제곱루트</span>
+        <span class="key">1</span>
+        <span class="key">2</span>
+        <span class="key">3</span>
+        <span class="key">+</span>
+        <span class="key">-</span>
+        <span class="key">4</span>
+        <span class="key">5</span>
+        <span class="key">6</span>
+        <span class="key">*</span>
+        <span class="key">/</span>
+        <span class="key">7</span>
+        <span class="key">8</span>
+        <span class="key">9</span>
+        <span class="key">%</span>
+        <span class="key">=</span>
+        <span class="key">0</span>
+        <span class="key">,</span>
+        <span class="key">.</span>
+        <span class="key">:</span>
+        <span class="key">;</span>
+        <span class="key">(</span>
+        <span class="key">)</span>
+        <span class="key">[</span>
+        <span class="key">]</span>
+        <span class="key eval-key">EV</span>
+    </div>
+
+
+</body>
+
+</html>
